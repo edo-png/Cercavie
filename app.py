@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data
 def load_data():
     # Carica il file Excel "Viario.xlsx" dalla stessa cartella
     df = pd.read_excel("Viario.xlsx")
@@ -11,7 +11,7 @@ df = load_data()
 
 st.title("Verifica Zona per Via e Numero Civico")
 
-# Campo di ricerca per la via (l'utente digita il nome)
+# Campo di ricerca per la via
 via_query = st.text_input("Inserisci il nome della via:")
 
 if via_query:
@@ -21,7 +21,7 @@ if via_query:
     if filtered_df.empty:
         st.write("Nessuna via trovata con questo nome.")
     else:
-        # Creiamo una copia per evitare warning, e generiamo una colonna 'descrizione'
+        # Creiamo una copia per evitare warning e generiamo una colonna 'descrizione'
         filtered_df = filtered_df.copy()
         filtered_df["descrizione"] = filtered_df.apply(
             lambda row: f'{row["Via"]} (dal {row["Dal civico"]} al {row["Al civico"]}, Zona: {row["Zona"]}, Comune: {row["Comune"]})',
@@ -29,7 +29,7 @@ if via_query:
         )
         opzioni = filtered_df["descrizione"].tolist()
         
-        # Il widget selectbox mostra le opzioni filtrate in tempo reale, fungendo da suggeritore
+        # Il widget selectbox mostra le opzioni filtrate in tempo reale
         scelta = st.selectbox("Suggerimenti per la via:", opzioni)
         
         # Estraiamo la riga selezionata
