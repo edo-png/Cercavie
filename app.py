@@ -45,5 +45,13 @@ if via_query:
             row = selected_row.iloc[0]
             try:
                 dal_civico = int(row["Dal civico"])
-                al_civico = int(row["Al_
-
+                al_civico = int(row["Al civico"])
+            except ValueError:
+                st.error("I valori per 'Dal civico' o 'Al civico' non sono numerici.")
+            else:
+                if dal_civico <= civico <= al_civico:
+                    st.success(f"Il numero civico {civico} rientra nell'intervallo (dal {dal_civico} al {al_civico}). La Zona è: {row['Zona']} e il Comune: {row['Comune']}.")
+                else:
+                    st.warning(f"Il numero civico {civico} NON è compreso nell'intervallo (dal {dal_civico} al {al_civico}).")
+else:
+    st.write("Digita il nome della via per iniziare la ricerca.")
